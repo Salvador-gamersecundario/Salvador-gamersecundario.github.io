@@ -36,6 +36,28 @@
                                                                                                                                                     <img src="asset/ING/chamito.png" alt="Chamito" class="final-image" >
                                                                                                                                                         </div>
                                                                                                                                                         </footer>
+                                                                                                                                                        
+    <!-- Menú hamburguesa para admin -->
+    <div id="menuHamburguesa" style="position:fixed;top:20px;right:20px;z-index:1000;">
+        <button id="openMenu" style="background:none;border:none;font-size:30px;color:#fff;cursor:pointer;">&#8942;</button>
+        <div id="menuOpciones" style="display:none;position:absolute;right:0;top:40px;background:#232526cc;padding:10px 20px;border-radius:8px;box-shadow:0 2px 8px #0006;">
+            <a href="/admin/admin.html" style="color:#fff;text-decoration:none;display:block;">Panel de administrador</a>
+        </div>
+    </div>
+    
                                                                                                                                                  <script src="script.js"></script>
+                                                                                                                                                <script>
+    // Menú hamburguesa
+    const openMenu = document.getElementById('openMenu');
+    const menuOpciones = document.getElementById('menuOpciones');
+    openMenu.addEventListener('click', () => {
+        menuOpciones.style.display = menuOpciones.style.display === 'block' ? 'none' : 'block';
+    });
+    document.addEventListener('click', (e) => {
+        if (!openMenu.contains(e.target) && !menuOpciones.contains(e.target)) {
+            menuOpciones.style.display = 'none';
+        }
+    });
+    </script>
                                                                                                                                                  </body>
                                                                                                                                                  </html>

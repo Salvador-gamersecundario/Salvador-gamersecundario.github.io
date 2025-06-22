@@ -80,4 +80,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             initParticles();
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 animateParticles();
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                });
+
+    // Leer datos del admin panel desde LocalStorage
+    const adminData = localStorage.getItem('adminPanelData');
+    if (adminData) {
+        const data = JSON.parse(adminData);
+        // Cambiar título y descripción
+        const h1 = document.querySelector('header h1');
+        if(h1 && data.mainTitle) h1.textContent = data.mainTitle;
+        const desc = document.querySelector('header p');
+        if(desc && data.mainDesc) desc.textContent = data.mainDesc;
+        // Noticias
+        const newsItems = document.querySelectorAll('.news-item');
+        if(newsItems[0] && data.news1) newsItems[0].textContent = data.news1;
+        if(newsItems[1] && data.news2) newsItems[1].textContent = data.news2;
+        // Noticias adicionales
+        const newsSection = document.getElementById('news');
+        if(newsSection && data.newsList && data.newsList.length) {
+            data.newsList.forEach(txt => {
+                const div = document.createElement('div');
+                div.className = 'news-item';
+                div.textContent = txt;
+                newsSection.appendChild(div);
+            });
+        }
+        // Imagen final
+        const img = document.querySelector('.final-image');
+        if(img && data.finalImage) img.src = data.finalImage;
+        // Color de fondo
+        if(data.bgColor) document.body.style.background = data.bgColor;
+        // Discord link
+        const discordBtn = document.querySelector('.discord-btn');
+        if(discordBtn && data.discordLink) discordBtn.href = data.discordLink;
+        // (Opcional) Intensidad de partículas: aquí podrías ajustar la cantidad si lo deseas
+    }
+            });

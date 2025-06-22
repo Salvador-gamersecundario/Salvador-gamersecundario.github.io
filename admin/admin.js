@@ -122,20 +122,37 @@ discordLink.oninput = function() {
     // Aquí se podría guardar el nuevo enlace para la página principal
 };
 
-// Guardar cambios (ahora en LocalStorage)
-document.getElementById("saveBtn").addEventListener("click", function() {
-    const datos = {
+// Mostrar/ocultar contraseña
+const togglePass = document.getElementById('togglePass');
+const adminCodeInput = document.getElementById('adminCode');
+togglePass.onclick = function() {
+    if (adminCodeInput.type === 'password') {
+        adminCodeInput.type = 'text';
+        togglePass.textContent = '🙈';
+    } else {
+        adminCodeInput.type = 'password';
+        togglePass.textContent = '👁️';
+    }
+};
+
+// Guardar cambios en LocalStorage para que se reflejen en la página principal
+function saveAdminData() {
+    const data = {
         mainTitle: document.getElementById("mainTitle").value,
         mainDesc: document.getElementById("mainDesc").value,
         news1: document.getElementById("news1").value,
         news2: document.getElementById("news2").value,
-        extraNews: Array.from(document.querySelectorAll('#newsList li')).map(li => li.textContent),
-        finalImage: document.getElementById("previewImage").src,
+        newsList: Array.from(document.querySelectorAll('#newsList li')).map(li => li.textContent),
         bgColor: document.getElementById("bgColor").value,
         particleIntensity: document.getElementById("particleIntensity").value,
-        discordLink: document.getElementById("discordLink").value
+        discordLink: document.getElementById("discordLink").value,
+        finalImage: document.getElementById("previewImage").src
     };
-    localStorage.setItem('adminPanelData', JSON.stringify(datos));
+    localStorage.setItem('adminPanelData', JSON.stringify(data));
+}
+
+document.getElementById("saveBtn").addEventListener("click", function() {
+    saveAdminData();
     document.getElementById("saveMsg").textContent = "Cambios guardados. Recarga la página principal para verlos.";
     alert("[Simulación] Commit realizado: Cambios guardados en la página principal.");
 });

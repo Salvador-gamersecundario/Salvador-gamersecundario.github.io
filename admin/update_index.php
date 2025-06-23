@@ -35,4 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     echo json_encode(['success' => false, 'message' => 'Método no permitido.']);
 }
+
+// OPCIONAL: Ejecutar git commit y push desde PHP si el servidor lo permite
+// (esto solo funcionará si el hosting tiene git y permisos adecuados)
+if (isset($_GET['git']) && $_GET['git'] === 'push') {
+    $output = [];
+    $return_var = 0;
+    exec('cd .. && git add . && git commit -m "commit desde web" && git push origin main 2>&1', $output, $return_var);
+    echo json_encode(['success' => $return_var === 0, 'output' => $output]);
+    exit;
+}
 ?>

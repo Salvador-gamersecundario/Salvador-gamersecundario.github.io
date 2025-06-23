@@ -215,6 +215,7 @@ toolMenu && toolMenu.addEventListener('click', function(e) {
 
 // Guardar cambios visuales
 const saveVisualBtn = document.getElementById('saveVisualBtn');
+const livePreview = document.getElementById('livePreview');
 saveVisualBtn && saveVisualBtn.addEventListener('click', async function() {
     const editableArea = document.getElementById('editableArea');
     if (!editableArea) return;
@@ -232,7 +233,10 @@ saveVisualBtn && saveVisualBtn.addEventListener('click', async function() {
     .then(r => r.json())
     .then(data => {
         document.getElementById('saveMsg').textContent = data.message;
-        if (data.success) alert('¡Cambios guardados!');
+        if (data.success) {
+            alert('¡Cambios guardados!');
+            if (livePreview) livePreview.src = livePreview.src; // Recargar vista previa
+        }
     });
 });
 

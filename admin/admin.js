@@ -240,6 +240,37 @@ saveVisualBtn && saveVisualBtn.addEventListener('click', async function() {
     });
 });
 
+// --- Selección y edición inline en el editor visual ---
+
+// Permitir seleccionar y editar cualquier elemento dentro del área editable
+const editableArea = document.getElementById('editableArea');
+let selectedElement = null;
+
+if (editableArea) {
+    editableArea.addEventListener('click', function(e) {
+        // Evitar seleccionar el área completa
+        if (e.target === editableArea) return;
+        // Quitar selección previa
+        if (selectedElement) {
+            selectedElement.style.outline = '';
+        }
+        selectedElement = e.target;
+        selectedElement.style.outline = '2px solid #4caf50';
+        // Hacer editable el texto si es un texto o recuadro
+        if (selectedElement.nodeType === 1 && selectedElement.tagName !== 'IMG') {
+            selectedElement.contentEditable = true;
+            selectedElement.focus();
+        }
+    });
+    // Al hacer click fuera, quitar selección
+    document.addEventListener('click', function(e) {
+        if (!editableArea.contains(e.target)) {
+            if (selectedElement) selectedElement.style.outline = '';
+            selectedElement = null;
+        }
+    });
+}
+
 // Inicializar editor visual al mostrar panel admin
 if (adminPanel) {
     loadEditableContent();

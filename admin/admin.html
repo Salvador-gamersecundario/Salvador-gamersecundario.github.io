@@ -18,14 +18,24 @@
         <p id="loginError" class="error"></p>
     </div>
     <div class="admin-panel" id="adminPanel" style="display:none;">
-        <h2>Consola de Administrador</h2>
-        <p>¡Cuidado! Puedes modificar toda la página principal.</p>
-        <label>Título principal:<br><input type="text" id="mainTitle"></label><br>
-        <label>Descripción:<br><input type="text" id="mainDesc"></label><br>
-        <label>Noticia 1:<br><input type="text" id="news1"></label><br>
-        <label>Noticia 2:<br><input type="text" id="news2"></label><br>
-        <button id="saveBtn">Guardar cambios</button>
-        <p id="saveMsg"></p>
+        <div id="visualEditorContainer" style="display:flex;">
+            <aside id="toolMenu" style="width:200px;background:#222;color:#fff;padding:10px;">
+                <h3>Herramientas</h3>
+                <button class="tool-btn" data-tool="text">Texto</button>
+                <button class="tool-btn" data-tool="image">Imagen</button>
+                <button class="tool-btn" data-tool="button">Botón</button>
+                <button class="tool-btn" data-tool="section">Sección</button>
+                <hr>
+                <button id="saveVisualBtn" style="background:#4caf50;color:#fff;width:100%;">Guardar Cambios</button>
+                <p id="saveMsg"></p>
+            </aside>
+            <main id="visualEditor" style="flex:1;background:#f4f4f4;min-height:600px;padding:20px;">
+                <h2>Editor Visual</h2>
+                <div id="editableArea" contenteditable="true" style="border:2px dashed #888;min-height:400px;padding:20px;background:#fff;">
+                    <!-- Aquí se cargará el contenido editable de index.html -->
+                </div>
+            </main>
+        </div>
     </div>
     <script src="admin.js"></script>
 </body>

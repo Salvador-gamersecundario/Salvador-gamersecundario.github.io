@@ -156,3 +156,87 @@ document.getElementById("saveBtn").addEventListener("click", function() {
     document.getElementById("saveMsg").textContent = "Cambios guardados. Recarga la página principal para verlos.";
     alert("[Simulación] Commit realizado: Cambios guardados en la página principal.");
 });
+
+// --- Editor Visual ---
+
+// Cargar el contenido de index.html en el editor visual
+async function loadEditableContent() {
+    const res = await fetch('../index.html');
+    const html = await res.text();
+    // Extraer solo el contenido del <body>
+    const bodyMatch = html.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+    const editableArea = document.getElementById('editableArea');
+    if (bodyMatch && editableArea) {
+        editableArea.innerHTML = bodyMatch[1];
+    }
+}
+
+// Herramientas para agregar elementos
+const toolMenu = document.getElementById('toolMenu');
+toolMenu && toolMenu.addEventListener('click', function(e) {
+    if (e.target.classList.contains('tool-btn')) {
+        const tool = e.target.getAttribute('data-tool');
+        const editableArea = document.getElementById('editableArea');
+        if (!editableArea) return;
+        if (tool === 'text') {
+            const p = document.createElement('p');
+            p.textContent = 'Nuevo texto editable';
+            p.contentEditable = true;
+            editableArea.appendChild(p);
+        } else if (tool === 'image') {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = function(ev) {
+                const file = ev.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(evv) {
+                        const img = document.createElement('img');
+                        img.src = evv.target.result;
+                        img.style.maxWidth = '200px';
+                        editableArea.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            input.click();
+        } else if (tool === 'button') {
+            const btn = document.createElement('button');
+            btn.textContent = 'Nuevo botón';
+            editableArea.appendChild(btn);
+        } else if (tool === 'section') {
+            const section = document.createElement('section');
+            section.innerHTML = '<h3>Nueva sección</h3><p>Contenido de la sección...</p>';
+            editableArea.appendChild(section);
+        }
+    }
+});
+
+// Guardar cambios visuales
+const saveVisualBtn = document.getElementById('saveVisualBtn');
+saveVisualBtn && saveVisualBtn.addEventListener('click', async function() {
+    const editableArea = document.getElementById('editableArea');
+    if (!editableArea) return;
+    // Reconstruir el index.html con el nuevo <body>
+    const res = await fetch('../index.html');
+    let html = await res.text();
+    html = html.replace(/<body[\s\S]*<\/body>/i, `<body>\n${editableArea.innerHTML}\n</body>`);
+    // Enviar al backend
+    const formData = new FormData();
+    formData.append('content', html);
+    fetch('update_index.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(r => r.json())
+    .then(data => {
+        document.getElementById('saveMsg').textContent = data.message;
+        if (data.success) alert('¡Cambios guardados!');
+    });
+});
+
+// Inicializar editor visual al mostrar panel admin
+if (adminPanel) {
+    loadEditableContent();
+}
